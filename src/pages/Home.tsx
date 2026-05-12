@@ -183,14 +183,18 @@ export default function Home() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {displayedBands.map((band, idx) => (
+            
+            {displayedBands.map((band, idx) => {
+              
+              const localAudioPath = '/music/${band.audio_file}'; 
+              return (
               <div key={band.name} className="space-y-6">
                 <BandCard 
                   image={band.image}
                   name={band.name}
                   genre={band.genre}
                   description={band.description}
-                  audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                  audio={localAudioPath}
                   delay={idx * 0.1}
                 />
                 <motion.div
@@ -207,7 +211,8 @@ export default function Home() {
                   </Link>
                 </motion.div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
