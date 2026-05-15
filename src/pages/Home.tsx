@@ -186,7 +186,7 @@ export default function Home() {
             
             {displayedBands.map((band, idx) => {
               
-              const localAudioPath = '/music/${band.audio_file}'; 
+              const localAudioPath = band.audio_file ? `/music_preview/${band.audio_file}` : undefined;
               return (
               <div key={band.name} className="space-y-6">
                 <BandCard 

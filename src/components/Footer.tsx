@@ -39,7 +39,7 @@ export default function Footer() {
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Cultural Partners</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <a 
-                href="https://www.premierleague.com/" 
+                href="https://duitpropertech.org/football/" 
                 target="_blank" 
                 rel="noreferrer"
                 className="group flex flex-col gap-2 p-4 bg-charcoal/30 border border-white/5 rounded-[2px] transition-all hover:border-accent-cyan/20"
