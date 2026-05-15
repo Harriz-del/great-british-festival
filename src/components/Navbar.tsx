@@ -20,10 +20,10 @@ export default function Navbar() {
 
   const links = [
     { name: 'The Assembly', path: '/showcase' },
-    { name: 'Tickets', path: '/#tickets' },
+    { name: 'Tickets', path: '/purchase-tickets' },
     { name: 'Vendors', path: '/vendor' },
     { name: 'Artists', path: '/artist-registration' },
-    { name: 'Contact', path: '/#contact' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   return (
