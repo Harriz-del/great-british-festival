@@ -105,59 +105,68 @@ export default function Showcase() {
         )}
       </section>
 
-      {/* The Assembly Wall - Underground Continuum */}
+{/* The Assembly Wall - Underground Continuum */}
       <section className="relative group/continuum">
-        <div className="flex items-center justify-between mb-10">
+        {/* Header & Description */}
+        <div className="flex flex-col mb-8 space-y-4">
           <div className="flex items-center gap-4 flex-grow">
-            <h2 className="text-2xl font-black italic uppercase tracking-tighter">Underground <span className="text-accent-lime">Continuum</span></h2>
+            <h2 className="text-2xl font-black italic uppercase tracking-tighter">
+              Underground <span className="text-accent-lime">Continuum</span>
+            </h2>
             <div className="h-px bg-white/5 flex-grow" />
           </div>
-          <div className="flex gap-2 ml-4">
-            <button 
-              onClick={() => scrollRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}
-              className="p-2 border border-white/10 hover:border-accent-lime transition-colors"
-            >
-              <ArrowRight className="w-4 h-4 rotate-180" />
-            </button>
-            <button 
-              onClick={() => scrollRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}
-              className="p-2 border border-white/10 hover:border-accent-lime transition-colors"
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+          <p className="text-gray-300 font-medium italic max-w-2xl leading-relaxed">
+            A pulse of underground bands and rising artists built to break through and take the festival stage.
+          </p>
         </div>
         
+        {/* Scrollable Vertical Container */}
+        {/* Note: Added max-h-[500px] and custom scrollbar styling */}
         <div 
-          ref={scrollRef}
-          className="flex gap-6 overflow-x-auto pb-12 scrollbar-none snap-x"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex flex-col gap-3 max-h-[500px] overflow-y-auto pr-2 pb-2"
+          style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'rgba(255, 255, 255, 0.1) transparent'
+          }}
         >
           {continuumBands.map((band, i) => (
             <motion.div
               key={band.name}
               initial={{ opacity: 0, y: 20 }}
+              // whileInView triggers as they scroll down the internal list
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: (i % 5) * 0.05 }}
-              viewport={{ once: true }}
-              className="group relative min-w-[300px] h-96 bg-charcoal/30 border border-white/5 overflow-hidden rounded-[2px] snap-start"
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: (i % 10) * 0.05 }} 
+              className="group relative w-full shrink-0 bg-charcoal/20 hover:bg-charcoal/40 border border-white/5 hover:border-white/10 rounded-[4px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-8 transition-colors overflow-hidden"
             >
-              <img src={band.image} className="w-full h-full object-cover grayscale opacity-30 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" alt={band.name} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[0.4em] mb-3">{band.genre}</span>
-                <h4 className="text-2xl font-black italic uppercase text-white mb-2">{band.name}</h4>
-                <p className="text-xs text-gray-400 font-medium italic line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">{band.description}</p>
-                <div className="mt-6 flex items-center gap-2 text-accent-lime text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
-                  <span>Explore DNA</span>
-                  <ChevronRight size={12} />
-                </div>
+              {/* Left Side: Genre and Name (Expanded to 1/3 width) */}
+              <div className="md:w-1/3 z-10">
+                <span className="text-[9px] text-accent-cyan font-black uppercase tracking-[0.4em] mb-2 block">
+                  {band.genre}
+                </span>
+                <h4 className="text-xl font-black italic uppercase text-white tracking-tight">
+                  {band.name}
+                </h4>
               </div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-accent-lime scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
+
+              {/* Right Side: Description (Expanded to 2/3 width) */}
+              <div className="md:w-2/3 z-10">
+                <p className="text-xs text-gray-300 font-medium italic leading-relaxed">
+                  {band.description}
+                </p>
+              </div>
+
+              {/* Hover Accent Bar */}
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent-lime scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-bottom" />
             </motion.div>
           ))}
+
+          {/* Empty State Fallback */}
           {continuumBands.length === 0 && Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="min-w-[300px] h-96 bg-charcoal/10 border border-white/5 border-dashed flex items-center justify-center">
-              <span className="text-[10px] font-black uppercase tracking-widest text-gray-600 italic">Syncing Continuum...</span>
+            <div key={i} className="w-full shrink-0 h-24 bg-charcoal/10 border border-white/5 border-dashed flex items-center justify-center rounded-[4px]">
+              <span className="text-[10px] font-black uppercase tracking-widest text-gray-600 italic">
+                Syncing Continuum Data...
+              </span>
             </div>
           ))}
         </div>
@@ -177,7 +186,7 @@ export default function Showcase() {
         </div>
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
           {activities.map((act) => (
-            <div key={act.title} className="p-8 bg-charcoal/30 border border-white/[0.03] flex flex-col gap-4 hover:border-accent-cyan/20 transition-all duration-500">
+            <div key={act.title} className="p-8 bg-charcoal/30 border border-white/[0.03] flex flex-col gap-4 hover:border-neon-pink/100 transition-all duration-500">
               <div className="text-accent-cyan opacity-50">{act.icon}</div>
               <h3 className="text-xl font-black uppercase tracking-tight italic">{act.title}</h3>
               <p className="text-sm text-gray-300 font-medium leading-relaxed italic">{act.desc}</p>
@@ -190,7 +199,7 @@ export default function Showcase() {
       <section>
         <div className="flex items-center gap-4 mb-10">
           <div className="h-px bg-white/[0.03] flex-grow" />
-          <h2 className="text-4xl md:text-5xl text-right font-black italic uppercase tracking-tighter">The <span className="text-accent-cyan">Gallery</span></h2>
+          <h2 className="text-4xl md:text-5xl text-right font-black italic uppercase tracking-tighter">The <span className="text-neon-pink">Gallery</span></h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 aspect-video overflow-hidden">
            {[1, 2, 3, 4].map(n => (
@@ -204,7 +213,7 @@ export default function Showcase() {
                  className="w-full h-full object-cover opacity-40 hover:opacity-100 transition-all duration-1000 grayscale hover:grayscale-0" 
                  alt="Gallery" 
                />
-               <Star className="absolute top-4 right-4 text-accent-cyan opacity-20" size={14} />
+               <Star className="absolute top-4 right-4 text-neon-pink opacity-20" size={14} />
              </motion.div>
            ))}
         </div>
