@@ -24,40 +24,29 @@ export default function TicketPurchase() {
       setLoading(true);
       try {
         const [{ data: tiersData }, { data: purchasesData }] = await Promise.all([
-          supabase.from('ticket_tiers').select('*'),
-          supabase.from('mock_purchases').select('tier, quantity')
+          supabase.from('ticket_tiers').select('*').order('price', { ascending: true }),
+          // We only need the foreign key ID and the quantity now!
+          supabase.from('mock_purchases').select('ticket_tier_id, quantity')
         ]);
 
         let processedTiers = [];
         if (tiersData && tiersData.length > 0) {
           processedTiers = tiersData.map(tier => {
+            // Count tickets sold by matching the UUID foreign key
             const sold = purchasesData
-              ?.filter(p => p.tier === tier.name)
+              ?.filter(p => p.ticket_tier_id === tier.id)
               .reduce((sum, p) => sum + (p.quantity || 0), 0) || 0;
-            
+
             return {
               ...tier,
               remaining: Math.max(0, tier.capacity - sold)
             };
           });
-        } else {
-          // Hardcoded fallbacks to ensure the app works even without base data
-          const fallbacks = [
-            { id: '8cd47c0a-167d-4c11-93b0-a275fbcc4b4b', name: 'General Admission', price: 85, capacity: 100 },
-            { id: '050584a3-1a53-41c2-b7e3-efe15e23dd4a', name: 'Weekend Pass', price: 195, capacity: 100 },
-            { id: 'f2f263e7-8bc9-41d6-a359-117bc29cf82c', name: 'VIP Pass', price: 350, capacity: 100 }
-          ];
-          processedTiers = fallbacks.map(tier => {
-            const sold = purchasesData
-              ?.filter(p => p.tier === tier.name)
-              .reduce((sum, p) => sum + (p.quantity || 0), 0) || 0;
-            return { ...tier, remaining: Math.max(0, tier.capacity - sold) };
-          });
         }
-
-        setTiers(processedTiers);
         
-        // Switch to first available tier if current one is sold out or not found
+        setTiers(processedTiers);
+
+        // Switch to first available tier if current one is sold out
         const currentTierData = processedTiers.find(t => t.name === formData.tier);
         if (!currentTierData || currentTierData.remaining <= 0) {
           const firstAvailable = processedTiers.find(t => t.remaining > 0);
@@ -69,7 +58,7 @@ export default function TicketPurchase() {
         // Global scarcity check
         const totalCapacity = processedTiers.reduce((sum, t) => sum + t.capacity, 0);
         const totalRemaining = processedTiers.reduce((sum, t) => sum + t.remaining, 0);
-        
+
         if (totalRemaining <= totalCapacity * 0.2 && totalRemaining > 0) {
           setScarcityMessage("Final passes are disappearing fast.");
         }
@@ -86,7 +75,14 @@ export default function TicketPurchase() {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/mock-payment', { state: { ...formData, total } });
+    // We pass the ticket_tier_id in the state payload!
+    navigate('/mock-payment', { 
+      state: { 
+        ...formData, 
+        ticket_tier_id: selectedTier.id,
+        total 
+      } 
+    });
   };
 
   return (

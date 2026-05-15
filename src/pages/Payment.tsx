@@ -27,7 +27,7 @@ export default function Payment() {
         {
           full_name: data.name,
           email: data.email,
-          ticket_tier: data.tier,
+          ticket_tier_id: data.ticket_tier_id,
           quantity: data.quantity,
           total_price: data.total,
           payment_status: 'completed'
@@ -136,7 +136,8 @@ export default function Payment() {
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">CVV</label>
                   <input
                     required
-                    type="text"
+                    type="password"
+                    inputMode="numeric"
                     placeholder="***"
                     maxLength={3}
                     value={cardData.cvv}

@@ -15,9 +15,19 @@ export default function AdminLogin() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'admin123') { // Mock authentication
+    
+    // Check for Super Admin Key
+    if (password === 'super-secret-123') { 
+      localStorage.setItem('adminRole', 'super_admin');
       navigate('/admin');
-    } else {
+    } 
+    // Check for Ticket Admin Key
+    else if (password === 'ticket-manager-123') {
+      localStorage.setItem('adminRole', 'ticket_admin');
+      navigate('/admin');
+    } 
+    // Invalid Key
+    else {
       setError('Invalid system access key.');
       setTimeout(() => setError(''), 3000);
     }
