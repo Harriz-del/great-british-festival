@@ -34,7 +34,8 @@ export default function ArtistRegistration() {
           genre: formData.genre, 
           description: formData.description, 
           portfolio_links: { links: formData.links },
-          status: 'pending'
+          status: 'pending',
+          is_official: true
         }
       ]);
 
