@@ -10,22 +10,27 @@ export default function Showcase() {
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const featuredNames = [
-    'The Beatles',
-    'The Rolling Stones',
-    'Queen',
-    'Royal Blood',
-    'Bring Me The Horizon',
-    'Coldplay',
-    'Arctic Monkeys'
-  ];
+// 1. The Modern Headliners (For the "Featured Artists" section)
+const featuredNames = [
+  'Royal Blood',
+  'Bring Me The Horizon',
+  'Coldplay',
+  'Arctic Monkeys'
+];
+
+// 2. The Legacy Showcase (For the "Blast from the Past" section)
+const legacyNames = [
+  'The Beatles',
+  'The Rolling Stones',
+  'Queen'
+];
 
   useEffect(() => {
     const fetchBands = async () => {
       const { data } = await supabase.from('artists').select('*').eq('status', 'approved');
       if (data) {
         const featuredNamesLower = featuredNames.map(n => n.toLowerCase());
-        
+        const legacyNamesLower = legacyNames.map(n => n.toLowerCase());
         // Filter featured 7 - case insensitive
         const featured = featuredNames.map(name => 
           data.find(b => b.name.toLowerCase() === name.toLowerCase())
@@ -34,7 +39,7 @@ export default function Showcase() {
         // Underground Continuum - everything else that is approved
         // Removing the is_official check to ensure all 14 (or more) show up
         const remaining = data.filter(b => 
-          !featuredNamesLower.includes(b.name.toLowerCase())
+          !featuredNamesLower.includes(b.name.toLowerCase()) && !legacyNamesLower.includes(b.name.toLowerCase())
         );
 
         setCoreBands(featured);

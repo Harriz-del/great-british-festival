@@ -7,37 +7,46 @@ import Countdown from '../components/Countdown';
 import { supabase } from '../lib/supabase';
 
 export default function Home() {
-  const [featuredBands, setFeaturedBands] = useState<any[]>([]);
+  // 1. SPLIT THE STATE INTO TWO ARRAYS
+  const [modernBands, setModernBands] = useState<any[]>([]);
+  const [legacyBands, setLegacyBands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false);
 
-  const featuredNames = [
-    'The Beatles',
-    'The Rolling Stones',
-    'Queen',
+  // Define the eras
+  const modernNames = [
     'Royal Blood',
     'Bring Me The Horizon',
     'Coldplay',
     'Arctic Monkeys'
   ];
 
+  const legacyNames = [
+    'The Beatles',
+    'The Rolling Stones',
+    'Queen'
+  ];
+
   useEffect(() => {
     const fetchBands = async () => {
-      // Fetch specifically by name to ensure we get the right ones
-      const { data } = await supabase.from('artists').select('*').in('name', featuredNames).eq('status', 'approved');
+      const { data } = await supabase.from('artists').select('*').in('name', [...modernNames, ...legacyNames]).eq('status', 'approved');
+      
       if (data) {
-        // Sort to match featuredNames order, case-insensitive
-        const sorted = featuredNames.map(name => 
+        // 2. SORT THE DATA INTO THE TWO ARRAYS
+        const sortedModern = modernNames.map(name => 
           data.find(b => b.name.toLowerCase() === name.toLowerCase())
         ).filter(Boolean);
-        setFeaturedBands(sorted);
+        
+        const sortedLegacy = legacyNames.map(name => 
+          data.find(b => b.name.toLowerCase() === name.toLowerCase())
+        ).filter(Boolean);
+
+        setModernBands(sortedModern);
+        setLegacyBands(sortedLegacy);
       }
       setLoading(false);
     };
     fetchBands();
   }, []);
-
-  const displayedBands = showAll ? featuredBands : featuredBands.slice(0, 3);
 
   return (
     <div className="bg-black">
@@ -158,8 +167,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Bands Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-charcoal/30">
+      {/* SECTION 1: MODERN HEADLINERS */}
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-charcoal/30 border-b border-white/5">
         <div className="max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -182,35 +191,81 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            
-            {displayedBands.map((band, idx) => {
-              
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {modernBands.map((band, idx) => {
               const localAudioPath = band.audio_file ? `/music_preview/${band.audio_file}` : undefined;
               return (
-              <div key={band.name} className="space-y-6">
-                <BandCard 
-                  image={band.image}
-                  name={band.name}
-                  genre={band.genre}
-                  description={band.description}
-                  audio={localAudioPath}
-                  delay={idx * 0.1}
-                />
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 + 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <Link 
-                    to="/purchase-tickets"
-                    className="w-full py-4 border border-white/5 bg-white/[0.02] text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 hover:text-accent-cyan hover:border-accent-cyan/50 hover:bg-accent-cyan/5 transition-all text-center block rounded-[2px]"
+                <div key={band.name} className="space-y-6">
+                  <BandCard 
+                    image={band.image}
+                    name={band.name}
+                    genre={band.genre}
+                    description={band.description}
+                    audio={localAudioPath}
+                    delay={idx * 0.1}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 + 0.2 }}
+                    viewport={{ once: true }}
                   >
-                    Purchase Ticket
-                  </Link>
-                </motion.div>
-              </div>
+                    <Link 
+                      to="/purchase-tickets"
+                      className="w-full py-4 border border-white/5 bg-white/[0.02] text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 hover:text-accent-cyan hover:border-accent-cyan/50 hover:bg-accent-cyan/5 transition-all text-center block rounded-[2px]"
+                    >
+                      Purchase Ticket
+                    </Link>
+                  </motion.div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2: BLAST FROM THE PAST (LEGACY) */}
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-black relative">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col mb-16 gap-4"
+          >
+            <p className="text-accent-cyan font-mono font-black tracking-[0.4em] uppercase mb-2 text-[10px]">Legacy Showcase</p>
+            <div className="flex flex-col md:flex-row md:items-center gap-6">
+              <h2 className="text-4xl md:text-5xl lg:text-7xl font-black italic uppercase tracking-tighter leading-tight shrink-0">
+                Blast from the <span className="text-accent-lime">Past</span>
+              </h2>
+              <div className="h-px bg-white/10 flex-grow hidden md:block" />
+            </div>
+            <p className="text-gray-400 text-xs font-medium italic max-w-2xl leading-relaxed mt-4">
+              Honoring the architects of sound. Experience the legacy of the icons who built the foundation of British rock.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {legacyBands.map((band, idx) => {
+              const localAudioPath = band.audio_file ? `/music_preview/${band.audio_file}` : undefined;
+              return (
+                <div key={band.name} className="space-y-6">
+                  <BandCard 
+                    image={band.image}
+                    name={band.name}
+                    genre={band.genre}
+                    description={band.description}
+                    audio={localAudioPath}
+                    delay={idx * 0.1}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 + 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                  </motion.div>
+                </div>
               );
             })}
           </div>
@@ -218,7 +273,7 @@ export default function Home() {
       </section>
 
       {/* Ticket Section */}
-      <section id="tickets" className="py-32 px-4 sm:px-6 lg:px-8 bg-black relative scroll-mt-20">
+      <section id="tickets" className="py-32 px-4 sm:px-6 lg:px-8 bg-charcoal/30 border-y border-white/5 relative scroll-mt-20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6">Select <span className="text-accent-lime">Access</span></h2>
@@ -253,7 +308,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className={`relative p-10 bg-charcoal/30 border border-white/[0.03] rounded-[2px] flex flex-col items-center text-center transition-all duration-500 hover:border-accent-cyan/30 ${pkg.featured ? 'md:scale-105 border-accent-cyan/20 z-10' : ''}`}
+                className={`relative p-10 bg-black/50 border border-white/[0.03] rounded-[2px] flex flex-col items-center text-center transition-all duration-500 hover:border-accent-cyan/30 ${pkg.featured ? 'md:scale-105 border-accent-cyan/20 z-10' : ''}`}
               >
                 {pkg.featured && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent-cyan text-black text-[9px] font-black px-4 py-1 uppercase tracking-widest">
