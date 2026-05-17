@@ -141,13 +141,25 @@ setStats({
     navigate('/access-gateway');
   };
 
-  // 6. DYNAMIC MENU BASED ON ROLE
-  const menuItems = [
+// 6. DYNAMIC MENU BASED ON ROLE
+  const availableTabs = [
     { name: 'Overview', icon: <BarChart3 size={18} />, roles: ['super_admin', 'ticket_admin'] },
     { name: 'Ticketing', icon: <Ticket size={18} />, roles: ['super_admin', 'ticket_admin'] },
-    { name: 'Artists', icon: <Music size={18} />, roles: ['super_admin'] },
-    { name: 'Vendors', icon: <Users size={18} />, roles: ['super_admin'] },
+    { name: 'Artists', icon: <Music size={18} />, roles: ['super_admin', 'artist_admin'] },
+    { name: 'Vendors', icon: <Users size={18} />, roles: ['super_admin', 'vendor_admin'] },
   ].filter(item => userRole && item.roles.includes(userRole));
+
+
+  // 7. SMART TAB ROUTING
+  // Automatically select the correct starting tab based on their role
+  useEffect(() => {
+    if (userRole && availableTabs.length > 0) {
+      const isTabAllowed = availableTabs.some(tab => tab.name === activeTab);
+      if (!isTabAllowed) {
+        setActiveTab(availableTabs[0].name); // Kick them to their authorized tab
+      }
+    }
+  }, [userRole, activeTab]);
 
   const chartData = [
     { name: 'Mon', sales: 400 }, { name: 'Tue', sales: 300 }, { name: 'Wed', sales: 600 },
@@ -178,7 +190,7 @@ setStats({
         </div>
 
         <nav className="flex-1 px-4 space-y-2 mt-4">
-          {menuItems.map((item) => (
+          {availableTabs.map((item) => (
             <button
               key={item.name}
               onClick={() => setActiveTab(item.name)}
@@ -306,7 +318,7 @@ setStats({
               </motion.div>
             )}
 
-            {activeTab === 'Vendors' && userRole === 'super_admin' && (
+            {activeTab === 'Vendors' && ['super_admin', 'vendor_admin'].includes(userRole) && (
               <motion.div key="vendors" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
                 <div className="bg-charcoal/20 border border-white/5 rounded-[2px] overflow-hidden">
                   <table className="w-full text-left">
@@ -330,7 +342,7 @@ setStats({
               </motion.div>
             )}
 
-            {activeTab === 'Artists' && userRole === 'super_admin' && (
+            {activeTab === 'Artists' && ['super_admin', 'artist_admin'].includes(userRole) && (
               <motion.div key="artists" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
                 <div className="bg-charcoal/20 border border-white/5 rounded-[2px] overflow-hidden">
                   <table className="w-full text-left">

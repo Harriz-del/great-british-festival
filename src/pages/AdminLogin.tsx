@@ -26,6 +26,19 @@ export default function AdminLogin() {
       localStorage.setItem('adminRole', 'ticket_admin');
       navigate('/admin');
     } 
+
+    // Check for Vendor Admin Key
+    else if (password === 'vendor-manager-123') {
+      localStorage.setItem('adminRole', 'vendor_admin');
+      navigate('/admin');
+    }
+    
+    // Check for Artist Admin Key
+    else if (password === 'artist-manager-123') {
+      localStorage.setItem('adminRole', 'artist_admin');
+      navigate('/admin');
+    }
+    
     // Invalid Key
     else {
       setError('Invalid system access key.');
