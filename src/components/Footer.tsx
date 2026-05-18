@@ -9,7 +9,7 @@ export default function Footer() {
             <img 
               src="https://www.britishcouncilfoundation.id/profiles/solas2/themes/solas_ui/images/desktop/britishcouncil_indigo_logo.jpg" 
               alt="British Council"
-              className="h-10 w-fit brightness-0 invert opacity-60"
+              className="h-30 w-fit brightness-100" 
             />
             <p className="text-gray-300 text-xs font-medium italic leading-relaxed">
               A definitive curation of British music identity. <br/>

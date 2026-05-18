@@ -113,7 +113,7 @@ setStats({
   };
 
   const fetchVendors = async () => {
-    const { data } = await supabase.from('vendors').select('*, vendor_categories(name)').order('created_at', { ascending: false });
+    const { data } = await supabase.from('vendors').select('*').order('created_at', { ascending: false });
     if (data) setVendors(data);
   };
 
@@ -332,8 +332,33 @@ setStats({
                           <td className="p-6 uppercase text-accent-cyan">{v.vendor_categories?.name}</td>
                           <td className="p-6"><span className="text-accent-lime font-black uppercase">{v.status}</span></td>
                           <td className="p-6 text-right">
-                            {v.status === 'pending' && <button onClick={() => updateStatus('vendors', v.id, 'approved')} className="text-accent-lime font-black">Approve</button>}
-                          </td>
+                          {(!v.status || v.status.toLowerCase() === 'pending') ? (
+                            <div className="flex justify-end items-center gap-3">
+                              {/* APPROVE BUTTON */}
+                              <button
+                                onClick={() => updateStatus('vendors', v.id, 'approved')}
+                                className="group relative flex items-center px-6 py-2 bg-accent-lime/5 border border-accent-lime/20 text-accent-lime text-[9px] font-black uppercase tracking-widest hover:bg-accent-lime hover:text-black transition-all duration-300 rounded-[2px]"
+                              >
+                                <span className="relative z-10">Authorize</span>
+                                <div className="absolute inset-0 bg-accent-lime opacity-0 group-hover:opacity-10 blur-md transition-opacity" />
+                              </button>
+
+                              {/* REJECT BUTTON */}
+                              <button
+                                onClick={() => updateStatus('vendors', v.id, 'rejected')}
+                                className="group relative flex items-center px-6 py-2 bg-red-500/5 border border-red-500/20 text-red-500 text-[9px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all duration-300 rounded-[2px]"
+                              >
+                                <span className="relative z-10">Decline</span>
+                                <div className="absolute inset-0 bg-red-500 opacity-0 group-hover:opacity-10 blur-md transition-opacity" />
+                              </button>
+                            </div>
+                          ) : (
+                            /* Verified badge if already approved/rejected */
+                            <div className="flex justify-end opacity-20">
+                              <ShieldCheck size={16} className="text-accent-lime" />
+                            </div>
+                          )}
+                        </td>
                         </tr>
                       ))}
                     </tbody>

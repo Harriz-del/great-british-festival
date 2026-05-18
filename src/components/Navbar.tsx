@@ -38,7 +38,8 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto h-full px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 relative z-[60]">
           <span className="text-sm font-black tracking-[0.4em] uppercase text-accent-cyan cursor-pointer">
-            GREATBRITISH.UK
+            <span className="hidden md:inline">GREATBRITISHFESTIVAL.UK</span>
+            <span className="inline md:hidden">GBF.UK</span>
           </span>
         </Link>
 

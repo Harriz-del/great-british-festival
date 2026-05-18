@@ -75,7 +75,7 @@ export default function Home() {
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black italic uppercase tracking-tighter leading-none mb-4">
               Great British<br/>
-              <span className="text-accent-cyan text-glow-cyan">Festival</span>
+              <span className="text-accent-cyan text-glow-cyan">Music Festival</span>
             </h1>
             <div className="flex flex-col items-center gap-4">
               <p className="text-gray-300 text-[10px] sm:text-xs md:text-base font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] italic mb-2">
@@ -87,7 +87,7 @@ export default function Home() {
                 <img 
                   src="https://www.britishcouncilfoundation.id/profiles/solas2/themes/solas_ui/images/desktop/britishcouncil_indigo_logo.jpg" 
                   alt="British Council"
-                  className="h-10 object-contain brightness-100"
+                  className="h-20 object-contain brightness-100"
                 />
                 <div className="w-16 h-px bg-white/20" />
               </div>
