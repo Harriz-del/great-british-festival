@@ -10,6 +10,14 @@ export default function Showcase() {
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+
+const the_gallery = [
+  'https://headlinerhub.com/assets/image-cache/img/articles//2022/crops/Large.c513fbca.coldplay_announce_2023_european_and_uk_tour_dates.6875bc4d.png',
+  'https://static.standard.co.uk/2025/05/28/15/09/Wireless-Festival-London-wt3y08z1.jpeg?trim=0,1152,0,1152&quality=75&auto=webp&width=960',
+  'https://www.nme.com/wp-content/uploads/2019/07/2019_royalblood_getty_2000x1270-1392x884.jpg',
+  'https://www.nme.com/wp-content/uploads/2023/11/uk_live_music-1392x884.jpg'
+];
+
 // 1. The Modern Headliners (For the "Featured Artists" section)
 const featuredNames = [
   'Royal Blood',
@@ -214,7 +222,7 @@ const legacyNames = [
                className="bg-charcoal overflow-hidden relative border border-white/[0.03]"
              >
                <img 
-                 src={`https://images.unsplash.com/photo-${1514525253361 + n}-bee8d48700df?auto=format&fit=crop&q=80&w=400`} 
+                 src={the_gallery[n - 1]} 
                  className="w-full h-full object-cover opacity-40 hover:opacity-100 transition-all duration-1000 grayscale hover:grayscale-0" 
                  alt="Gallery" 
                />

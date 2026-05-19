@@ -17,6 +17,9 @@ import AdminLogin from './pages/AdminLogin';
 import TicketPurchase from './pages/TicketPurchase';
 import Payment from './pages/Payment';
 import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
+import Gateway from './pages/Gateway';
+import SonicChronicles from './pages/SonicChronicles';
+import FloatingGateway from './components/FloatingGateway';
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -40,6 +43,11 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+
+        <Route path="/" element={<Gateway />} />
+        <Route path="/home" element={<Home />} /> {/* Moved current home to /home */}
+        <Route path="/sonic-chronicles" element={<SonicChronicles />} />
+
         <Route path="/" element={
           <PageWrapper>
             <Home />
@@ -84,6 +92,7 @@ function AnimatedRoutes() {
           <AdminDashboard />
         } />
       </Routes>
+      <FloatingGateway />
     </AnimatePresence>
   );
 }
