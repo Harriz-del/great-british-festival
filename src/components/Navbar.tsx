@@ -19,10 +19,10 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
-  // Added dropdown items to The Assembly
+  // Added dropdown items to Explore Lineup
   const links = [
     { 
-      name: 'The Assembly', 
+      name: 'Explore Lineup', 
       path: '/showcase',
       dropdown: [
         { name: 'Music Rosters', path: '/showcase' },

@@ -9,6 +9,7 @@ export default function Showcase() {
   const [continuumBands, setContinuumBands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
 
 const the_gallery = [
@@ -66,6 +67,9 @@ const legacyNames = [
   ];
 
   return (
+
+    
+
     <div className="flex flex-col gap-20 p-6 md:p-10 pt-24 overflow-hidden">
       {/* Introduction */}
       <section className="max-w-4xl">
@@ -88,6 +92,22 @@ const legacyNames = [
           </p>
         </motion.div>
       </section>
+
+      {/* Interactive Search Bar Widget */}
+      <div className="max-w-md mb-12 relative group">
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-accent-cyan transition-colors">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          type="text"
+          placeholder="SEARCH HEADLINERS OR GENRES..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full bg-charcoal/20 border border-blue/5 pl-12 pr-4 py-4 text-[10px] text-white font-black uppercase tracking-widest placeholder-gray-600 focus:outline-none focus:border-accent-cyan/50 focus:bg-accent-cyan/[0.02] rounded-[2px] transition-all"
+        />
+      </div>
 
       {/* Core Artists */}
       <section>
@@ -223,7 +243,7 @@ const legacyNames = [
              >
                <img 
                  src={the_gallery[n - 1]} 
-                 className="w-full h-full object-cover opacity-40 hover:opacity-100 transition-all duration-1000 grayscale hover:grayscale-0" 
+                 className="w-full h-full object-cover transition-all duration-1000" 
                  alt="Gallery" 
                />
                <Star className="absolute top-4 right-4 text-neon-pink opacity-20" size={14} />

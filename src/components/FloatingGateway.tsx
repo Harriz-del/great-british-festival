@@ -13,9 +13,9 @@ export default function FloatingGateway() {
     <motion.div 
       drag 
       dragMomentum={false}
-      className="fixed top-8 right-8 z-[100] flex flex-col items-end gap-3 cursor-move"
+      className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-3 cursor-move"
     >
-      {/* MODIFIED: Converted to motion.div with drag enabled. Placed at top-24. */}
+      {/* MODIFIED: Converted to motion.div with drag enabled */}
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}

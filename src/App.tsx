@@ -41,6 +41,9 @@ function AnimatedRoutes() {
   const location = useLocation();
   
   return (
+    <>
+    <ScrollToTop />
+
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
 
@@ -92,8 +95,11 @@ function AnimatedRoutes() {
           <AdminDashboard />
         } />
       </Routes>
-      <FloatingGateway />
+      
     </AnimatePresence>
+
+    <FloatingGateway />
+    </>
   );
 }
 
