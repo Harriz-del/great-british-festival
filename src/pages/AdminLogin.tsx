@@ -38,6 +38,12 @@ export default function AdminLogin() {
       localStorage.setItem('adminRole', 'artist_admin');
       navigate('/admin');
     }
+
+    //Check for Contact Admin Key
+    else if (password === 'contact-manager-123') {
+      localStorage.setItem('adminRole', 'contact_admin');
+      navigate('/admin');
+    }
     
     // Invalid Key
     else {

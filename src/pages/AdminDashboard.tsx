@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Users, Music, BarChart3, LogOut, 
-  Menu, X, TrendingUp, 
+  Menu, X, TrendingUp, Mail,
   Ticket, ShieldCheck, BarChart3 as BarChartIcon
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -38,6 +38,7 @@ export default function AdminDashboard() {
   const [vendors, setVendors] = useState<any[]>([]);
   const [bands, setBands] = useState<any[]>([]);
   const [tiersData, setTiersData] = useState<any[]>([])
+  const [messages, setMessages] = useState<any[]>([]);
 
   // 3. SECURITY BOUNCER
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function AdminDashboard() {
       fetchStats();
       fetchVendors();
       fetchBands();
+      fetchMessages();
     }
   }, [activeTab, userRole]);
 
@@ -81,7 +83,8 @@ const fetchStats = async () => {
         supabase.from('artists').select('status'),
         supabase.from('vendors').select('status'),
         supabase.from('mock_purchases').select('*').order('created_at', { ascending: false }),
-        supabase.from('ticket_tiers').select('*')
+        supabase.from('ticket_tiers').select('*'),
+        supabase.from('contact_inquiries').select('*').order('created_at', { ascending: false })
       ]);
 
       const totalArtists = artistsRes.data?.length || 0;
@@ -122,6 +125,11 @@ setStats({
     if (data) setBands(data);
   };
 
+  const fetchMessages = async () => {
+    const { data } = await supabase.from('contact_inquiries').select('*').order('created_at', { ascending: false });
+    if (data) setMessages(data);
+  };0
+
   const updateStatus = async (table: string, id: string, status: string) => {
     // We changed the id type to string to match Supabase UUIDs
     const { error } = await supabase.from(table).update({ status }).eq('id', id);
@@ -147,6 +155,7 @@ setStats({
     { name: 'Ticketing', icon: <Ticket size={18} />, roles: ['super_admin', 'ticket_admin'] },
     { name: 'Artists', icon: <Music size={18} />, roles: ['super_admin', 'artist_admin'] },
     { name: 'Vendors', icon: <Users size={18} />, roles: ['super_admin', 'vendor_admin'] },
+    { name: 'Communications', icon: <Mail size={18} />, roles: ['super_admin', 'contact_admin'] },
   ].filter(item => userRole && item.roles.includes(userRole));
 
 
@@ -415,6 +424,45 @@ setStats({
                 </div>
               </motion.div>
             )}
+
+            {activeTab === 'Communications' && ['super_admin', 'contact_admin'].includes(userRole) && (
+              <motion.div key="communications" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+                <div className="bg-charcoal/20 border border-white/5 rounded-[2px] overflow-hidden">
+                  <table className="w-full text-left">
+                    <thead className="bg-white/[0.02] text-[10px] uppercase font-black tracking-widest text-gray-300 border-b border-white/5">
+                      <tr>
+                        <th className="p-6 w-1/4">Sender Signal</th>
+                        <th className="p-6 w-2/4">Transmission</th>
+                        <th className="p-6 w-1/4">Timestamp</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-[11px] text-gray-200">
+                      {messages.map((m) => (
+                        <tr key={m.id} className="border-b border-white/[0.02] hover:bg-white/[0.01] transition-colors">
+                          <td className="p-6 align-top">
+                            <p className="text-white font-black">{m.name}</p>
+                            <p className="text-[9px] text-accent-cyan uppercase tracking-widest mt-1">{m.email}</p>
+                          </td>
+                          <td className="p-6 align-top">
+                            <p className="text-gray-300 italic leading-relaxed text-sm">{m.message}</p>
+                          </td>
+                          <td className="p-6 align-top text-[9px] uppercase tracking-tighter text-gray-500 font-mono">
+                            {new Date(m.created_at).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  
+                  {messages.length === 0 && (
+                    <div className="p-12 text-center text-gray-500 font-black uppercase tracking-widest text-xs italic">
+                      No Transmissions Received
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
           </AnimatePresence>
         </div>
       </main>

@@ -15,6 +15,7 @@ export default function Gateway() {
       {/* MODIFIED: Animated Background Ambience */}
       <motion.div 
         animate={{ rotate: 360 }}
+        style={{ translate: "translateZ(0)", willChange: "transform" }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
         className="absolute inset-[-50%] z-0 flex items-center justify-center pointer-events-none origin-center"
       >
@@ -60,7 +61,7 @@ export default function Gateway() {
             animate={{ rotate: 360 }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             className="absolute top-1/2 left-1/2 w-[250%] h-[250%] bg-[conic-gradient(transparent_75%,#00E5FF_100%)] group-hover:opacity-0 transition-opacity duration-500 z-0"
-            style={{ x: "-50%", y: "-50%" }}
+            style={{ x: "-50%", y: "-50%", translate: "translateZ(0)", willChange: "transform"   }}
           />
 
           {/* INNER CONTENT MASK */}

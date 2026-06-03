@@ -13,11 +13,44 @@ const legends = [
     name: 'Queen',
     image: 'https://i.guim.co.uk/img/media/c6a272cdaf5d9cd66922e136e99eceefd0253f70/570_0_2700_2160/master/2700.jpg?width=620&dpr=2&s=none&crop=none',
     achievements: ['300 Million Records Sold', 'Global Icon Award'],
-    history: 'Known for their musical versatility and legendary live performances, particularly Live Aid 1985.',
+    history: 'Known for their musical versatility and legendary live performances, particularly their historic set at Live Aid 1985.',
     iconic: 'Bohemian Rhapsody redefined commercial radio constraints.'
   },
-
-  // Add Rolling Stones, Coldplay, BMTH, Arctic Monkeys, Royal Blood here...
+  {
+    name: 'The Rolling Stones',
+    image: 'https://cdn.britannica.com/41/197341-050-4859B808/The-Rolling-Stones-Bill-Wyman-Keith-Richards-1964.jpg',
+    achievements: ['250 Million Records Sold', '3 Grammys'],
+    history: 'Emerging as the gritty, rebellious counterpoint to the Beatles, they defined the modern attitude of blues-driven rock and roll.',
+    iconic: 'Pioneered the massive stadium-tour business model.'
+  },
+  {
+    name: 'Coldplay',
+    image: 'https://indonesiaatmelbourne.unimelb.edu.au/wp-content/uploads/2023/12/Coldplay-1030x687.jpeg',
+    achievements: ['100 Million Records Sold', '7 Grammys'],
+    history: 'Evolving from post-Britpop melodic piano rock into global stadium-synth anthems, becoming the 21st century\'s biggest British export.',
+    iconic: 'Pioneered the synchronized LED wristband stadium experience.'
+  },
+  {
+    name: 'Arctic Monkeys',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/0/04/Arctic_Monkeys_-_Orange_Stage_-_Roskilde_Festival_2014.jpg',
+    achievements: ['6 Brit Awards', 'Fastest-Selling Debut Album'],
+    history: 'Exploding out of Sheffield via early internet hype, they brought razor-sharp indie-rock back to the mainstream digital age.',
+    iconic: 'Proved the power of internet-led organic music discovery.'
+  },
+  {
+    name: 'Bring Me The Horizon',
+    image: 'https://www.nme.com/wp-content/uploads/2022/03/BRINGMETHEHORIZON-1-JENMCCORD-BANDLAB-NME-AWARDS-2022.jpg',
+    achievements: ['4 Kerrang! Awards', 'Multiple Platinum Singles'],
+    history: 'A relentless evolution from raw deathcore into arena-filling alternative electronic rock, constantly pushing the boundaries of heavy music.',
+    iconic: '"Sempiternal" redefined the modern metalcore blueprint.'
+  },
+  {
+    name: 'Royal Blood',
+    image: 'https://www.nme.com/wp-content/uploads/2019/07/2019_royalblood_getty_2000x1270-1392x884.jpg',
+    achievements: ['Best British Group', '3 Consecutive #1 Albums'],
+    history: 'Revived the heavy rock duo format with massive, thick riffs originating from a coastal town in West Sussex.',
+    iconic: 'Uses complex pedal chains to make a bass sound like a lead guitar.'
+  }
 ];
 
 export default function SonicChronicles() {
@@ -78,15 +111,6 @@ export default function SonicChronicles() {
           </motion.div>
         ))}
       </div>
-
-      {/* Relocated Gallery Section */}
-      <section className="max-w-7xl mx-auto px-4 mt-32">
-         <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-10 border-b border-white/10 pb-4">Visual <span className="text-accent-lime">Archive</span></h2>
-         {/* INSERT EXISTING GALLERY CODE HERE */}
-         <div className="h-96 border border-white/10 border-dashed flex items-center justify-center text-gray-500 text-xs tracking-widest uppercase">
-            [Existing Gallery Component Renders Here]
-         </div>
-      </section>
     </div>
   );
 }

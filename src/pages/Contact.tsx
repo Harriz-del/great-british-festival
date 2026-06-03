@@ -1,16 +1,37 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion'; // Assuming you use framer-motion based on prior files
 import { Mail, Phone, MapPin, Send, Instagram, Twitter, Facebook } from 'lucide-react';
+import { supabase } from '../lib/supabase'; // Important: Import your database client!
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
-    setFormState({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+
+    // Send data to Supabase
+    const { error } = await supabase
+      .from('contact_inquiries')
+      .insert([
+        { 
+          name: formState.name, 
+          email: formState.email, 
+          message: formState.message 
+        }
+      ]);
+
+    setIsSubmitting(false);
+
+    if (!error) {
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 5000);
+      setFormState({ name: '', email: '', message: '' });
+    } else {
+      alert("Transmission failed. Please check your connection.");
+    }
   };
 
   return (
@@ -36,9 +57,9 @@ export default function Contact() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="glass-morphism p-8 md:p-12"
+              className="bg-charcoal/40 border border-white/5 p-8 md:p-12 rounded-[2px] backdrop-blur-md"
             >
-              <h2 className="text-3xl font-black italic uppercase tracking-tight mb-8">Send a Message</h2>
+              <h2 className="text-3xl font-black italic uppercase tracking-tight mb-8 text-white">Send a Message</h2>
               
               {submitted ? (
                 <div className="bg-accent-lime/20 border border-accent-lime p-6 text-accent-lime font-black uppercase tracking-widest text-center mb-6 text-xs">
@@ -53,7 +74,7 @@ export default function Contact() {
                       type="text"
                       value={formState.name}
                       onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                      className="w-full bg-white/[0.03] border border-white/5 px-4 py-4 text-white focus:outline-none focus:border-accent-cyan transition-colors rounded-[2px]"
+                      className="w-full bg-black/50 border border-white/10 px-4 py-4 text-white focus:outline-none focus:border-accent-cyan transition-colors rounded-[2px]"
                       placeholder="Jane Doe"
                     />
                   </div>
@@ -64,7 +85,7 @@ export default function Contact() {
                       type="email"
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      className="w-full bg-white/[0.03] border border-white/5 px-4 py-4 text-white focus:outline-none focus:border-accent-cyan transition-colors rounded-[2px]"
+                      className="w-full bg-black/50 border border-white/10 px-4 py-4 text-white focus:outline-none focus:border-accent-cyan transition-colors rounded-[2px]"
                       placeholder="jane@solstice.uk"
                     />
                   </div>
@@ -75,21 +96,22 @@ export default function Contact() {
                       rows={5}
                       value={formState.message}
                       onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                      className="w-full bg-white/[0.03] border border-white/5 px-4 py-4 text-white focus:outline-none focus:border-accent-cyan transition-colors resize-none rounded-[2px]"
+                      className="w-full bg-black/50 border border-white/10 px-4 py-4 text-white focus:outline-none focus:border-accent-cyan transition-colors resize-none rounded-[2px]"
                       placeholder="Your inquiry..."
                     />
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-primary w-full py-5 flex items-center justify-center gap-3"
+                    disabled={isSubmitting}
+                    className="w-full py-5 flex items-center justify-center gap-3 bg-white text-black font-black uppercase tracking-widest hover:bg-accent-lime transition-colors disabled:opacity-50"
                   >
-                    Send Signal <Send className="w-4 h-4" />
+                    {isSubmitting ? 'Transmitting...' : 'Send Signal'} <Send className="w-4 h-4" />
                   </button>
                 </form>
               )}
             </motion.div>
 
-            {/* Info & Socials */}
+{/* Info & Socials */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
